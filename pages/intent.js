@@ -6,7 +6,7 @@ import Editor from '@monaco-editor/react';
 import { defaultRuleDefinition } from '../utils/intentConstants';
 
 export default function Home() {
-  const [submission, setSubmission] = useState(`Hi Jane, my name is Wright and I'm speaking you on a recorded line. How can I help you today?`);
+  const [submission, setSubmission] = useState(`Yes sir, this is acceptable!`);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState();
   const [ruleDefinition, setRuleDefinition] = useState(defaultRuleDefinition);
@@ -46,7 +46,7 @@ export default function Home() {
     console.log('event:', event);
     setRuleDefinition(value);
   };
-  console.log(JSON.parse(result?.content || '[]'));
+  // console.log(JSON.parse(result?.content || '[]'));
   return (
     <div>
       <Head>

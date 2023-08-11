@@ -72,5 +72,10 @@ Using this scale, determine whether the submission below signals the intent indi
 Intent Samples: ${JSON.stringify(ruleDefinition.intentSamples)}
 Learner Submission: ${JSON.stringify(submission)}
 Consistency of your response is essential for the success of this work, so reply using the JSON template below. Do not provide any other commentary outside of the JSON template requested as this will cause system errors for the company you are supporting.
+JSON TEMPLATE:
+{
+  rating: <rating-value>,
+  feedback: <feedback-value>
+}
         `;
 }

@@ -1,8 +1,11 @@
 const defaultRuleDefinition = `{
-    "intentSamples": [
-      "You're on a recorded line."
-    ]
+  "intentSamples": [
+    "yeah man it’s no big deal.",
+    "no problemo I’ve been there.",
+    "We’re totally cool with that."
+  ]
 }
+
 `;
 
 export { defaultRuleDefinition };
