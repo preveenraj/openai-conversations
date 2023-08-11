@@ -15,7 +15,7 @@ export default function Home() {
     setLoading(true);
     event.preventDefault();
     try {
-      const response = await fetch('/api/generate', {
+      const response = await fetch('/api/term-synthesis', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

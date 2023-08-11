@@ -64,24 +64,23 @@ export default async function (req, res) {
 }
 
 function createContext() {
-  return `You are grading elements of a conversation by applying rules of phrase matching and intent. For each of the items in this json array, check to see if the conditions are met. You can find the specimen piece to be analysed against the rules just after the rules below. Please return a json array with the id of the rule and the rating that you have given it. If the rule is not met, please return a rating of 0 for each condition.
-  Description of the rule structure:
+  return `You are grading a submission text based on certain rules represented as json. For each of the items in this json array, check to see if the conditions are met. You can find the specimen piece to be analysed against the rules just after the rules below.
 
-  uuid: The universally unique identifier (UUID) is a unique identifier assigned to each rule. It ensures that each rule is distinguishable and can be referenced when managing or updating rules. Return the same uuid along with the result response.
+  Rule Definition Structure:
+
+  uuid: This is a unique identifier assigned to each rule. It ensures that each rule is distinguishable and can be referenced when managing or updating rules. Return the same uuid along with the result response.
 
   skills: This field represents a collection of skills where each skill contains a set of ratingRules to determine the rating based on certain conditions.
     id: An identifier for the skill. This is used to reference the skill when defining rating rules.
-    ratingRules: Each skill can have multiple rating rules, each evaluating different conditions. These rules determine the rating assigned to the employee's submission.
-      id: A unique identifier for the rating rule, allowing easy management and tracking of rules.
+    ratingRules: Each skill can have multiple rating rules, each evaluating different conditions. These rules determine the rating assigned to the submission.
+      id: A unique identifier for the rating rule.
       rating: The rating to assign if the conditions of this rule are met.
-      conditions: Conditions define the criteria that the employee's submission must meet to trigger this rule. Multiple conditions can be defined, and they are evaluated in a specific order.
+      conditions: Conditions define the criteria that the employee's submission must meet to trigger this rule.
         id: A unique identifier for each condition within the rule.
-        terms: The terms or keywords that need to be present in the employee's submission for this condition to be satisfied. The caseSensitive attribute specifies whether the term matching should be case-sensitive or not.
-        expression: This is the numeric value or keyword that indicates the degree of success for this condition. For instance, 100 could indicate a perfect match.
-        The term should match keeping the following rules in mind:
-        1. The term should be a single word in the submission, it cannot be a substring. For example, if the term is "test", then the word "testimony" should not be matched.
-        2. The term should be considered as a match only if it is a complete word.
-        3.  The term can be matched against multiple occurence of the same word but it should be delimitted.
+        terms: The keywords that need to be present in the submission for this condition to be satisfied. 
+        The term should exactly match the word in the submission for it to be a hit.
+        expression: This is the numeric value or keyword that indicates the degree of success for this condition.
+
 
 
   Description of the submission structure:
@@ -89,7 +88,7 @@ function createContext() {
   
   Description of the response structure:
   The response should be a json object with the following:
-  uuid: The universally unique identifier (UUID) is a unique identifier assigned to each rule. It ensures that each rule is distinguishable and can be referenced when managing or updating rules. This is the same uuid that was sent in the request.
+  uuid: This is the same uuid for the entire rule that was sent in the request.
   skillResults: It is a json array that represents result for each skill that was sent in the request. Each skill should have a result object with the following:
   skillId: The id of the skill that was sent in the request.
   ratingRules: It is a json array that represents result for each rating rule that was sent inside each skill in the request. Each rating rule should have a result object with the following:
@@ -97,8 +96,8 @@ function createContext() {
   conditions: It is a json array that represents result for each condition that was sent inside each rating rule in the request. Each condition should have a result object like the example below:
   "conditions": [
     {
-        "hit": "yes",
-        "score": "100",
+        "hit": "yes", //Whether the condition was met or not. It can be yes or no.
+        "score": "100", //A metric that indicates the degree of success for this condition.
         "locations": [ //Array of locations where the condition was met. The same word can be located at multiple places in the submission. It should be also included in the locations array.
             {
                 "label": "Sarah", //Label of the term that was matched
@@ -109,6 +108,8 @@ function createContext() {
         "condition_id": "df2c34c6-e0db-491d-b34f-aab680ffc666" //Condition id that was sent in the request
     }
 ]
+submission: Return back the original submission too in the response.
+
         `
 }
 
@@ -119,7 +120,7 @@ function getRuleDefinitionPrompt(ruleDefinition) {
 }
 
 function getSubmissionPrompt(submission) {
-  return `this is a not a submission that you must grade:
+  return `This is the submission that you must grade:
   '${submission}'
   `
 }
