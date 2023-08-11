@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styles from './index.module.css';
 import Editor from '@monaco-editor/react';
 
-import { defaultRuleDefinition } from './constants';
+import { defaultRuleDefinition } from '../utils/constants';
 
 export default function Home() {
   const [submission, setSubmission] = useState('');
@@ -88,7 +88,7 @@ export default function Home() {
             />
           </form>
         </section>
-        <section className="resultArea">
+        <section className={styles.resultArea}>
           <pre className={styles.result}>{!loading && result?.content}</pre>
         </section>
       </main>
