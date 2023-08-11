@@ -15,11 +15,19 @@ export default async function (req, res) {
     return;
   }
 
-  const submission = req.body.submission || '';
+  const { submission, ruleDefinition } = req.body || {};
   if (submission.trim().length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid submission",
+      }
+    });
+    return;
+  }
+  if (ruleDefinition.trim().length === 0) {
+    res.status(400).json({
+      error: {
+        message: "Please enter a valid rule definition",
       }
     });
     return;
@@ -31,7 +39,7 @@ export default async function (req, res) {
       temperature: 0,
       messages:[
         {"role": "system", "content": createContext()},
-        {"role": "user", "content": getRuleDefinition()},
+        {"role": "user", "content": getRuleDefinitionPrompt(ruleDefinition)},
         {"role": "user", "content": getSubmissionPrompt(submission)},
         // {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
         // {"role": "user", "content": "Where was it played?"}
@@ -68,8 +76,12 @@ function createContext() {
       rating: The rating to assign if the conditions of this rule are met.
       conditions: Conditions define the criteria that the employee's submission must meet to trigger this rule. Multiple conditions can be defined, and they are evaluated in a specific order.
         id: A unique identifier for each condition within the rule.
-        terms: The terms or keywords that need to be present in the employee's submission for this condition to be satisfied. The term can be matched against multiple occurence of the same word.The caseSensitive attribute specifies whether the term matching should be case-sensitive or not.
+        terms: The terms or keywords that need to be present in the employee's submission for this condition to be satisfied. The caseSensitive attribute specifies whether the term matching should be case-sensitive or not.
         expression: This is the numeric value or keyword that indicates the degree of success for this condition. For instance, 100 could indicate a perfect match.
+        The term should match keeping the following rules in mind:
+        1. The term should be a single word in the submission, it cannot be a substring. For example, if the term is "test", then the word "testimony" should not be matched.
+        2. The term should be considered as a match only if it is a complete word.
+        3.  The term can be matched against multiple occurence of the same word but it should be delimitted.
 
 
   Description of the submission structure:
@@ -100,36 +112,9 @@ function createContext() {
         `
 }
 
-function getRuleDefinition() {
+function getRuleDefinitionPrompt(ruleDefinition) {
   return `Here is the rule definition:
-  {
-    "uuid": "4b1462c1-afdf-4a6d-9654-6916e9c27e1c",
-    "skills": [
-      {
-        "id": 215,
-        "ratingRules": [
-          {
-            "id": "5a6b0157-7a00-4472-83d4-218a400a3039",
-            "rating": 3,
-            "conditions": [
-              {
-                "id": "df2c34c6-e0db-491d-b34f-aab680ffc666",
-                "terms": [
-                  {
-                    "term": "test",
-                    "caseSensitive": false
-                  }
-                ],
-                "subject": "learner_submission",
-                "expression": "100"
-              },
-            ]
-          }
-        ]
-      },
-    ],
-    "userId": 2101
-  }
+  ${ruleDefinition}
   `
 }
 
