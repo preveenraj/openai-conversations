@@ -6,7 +6,7 @@ import Editor from '@monaco-editor/react';
 import { defaultRuleDefinition } from '../utils/intentConstants';
 
 export default function Home() {
-  const [submission, setSubmission] = useState(`Yes sir, this is acceptable!`);
+  const [submission, setSubmission] = useState(``);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState();
   const [ruleDefinition, setRuleDefinition] = useState(defaultRuleDefinition);

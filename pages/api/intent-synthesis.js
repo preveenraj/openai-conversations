@@ -70,6 +70,7 @@ Assume you are helping a company deliver conversation simulations as part of emp
 To conduct the assessment use a 4-star scale. Provide 1 star if the learner shows no alignment with the intent. Provide 2 stars if the learner shows some alignment with the intent, but has opportunities to improve. Provide 3 stars if the learner fully shows the intent. Provide 4 stars if the learner provides an exemplary or outstanding example of the intent.
 Using this scale, determine whether the submission below signals the intent indicated by the types of samples below. The samples are separated by periods.
 Intent Samples: ${JSON.stringify(ruleDefinition.intentSamples)}
+Explanation of Intent: ${ruleDefinition.explanationOfIntent || "No explanation provided."}
 Learner Submission: ${JSON.stringify(submission)}
 Consistency of your response is essential for the success of this work, so reply using the JSON template below. Do not provide any other commentary outside of the JSON template requested as this will cause system errors for the company you are supporting.
 JSON TEMPLATE:
