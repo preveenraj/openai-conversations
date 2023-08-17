@@ -15,13 +15,14 @@ export default function Home() {
     setLoading(true);
     event.preventDefault();
     try {
+      const parsedRuleDefinition = JSON.parse(ruleDefinition.trim());
       const response = await fetch('/api/intent-synthesis', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ruleDefinition,
+          ruleDefinition: parsedRuleDefinition,
           submission,
         }),
       });
